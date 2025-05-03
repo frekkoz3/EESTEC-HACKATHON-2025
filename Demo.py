@@ -53,10 +53,11 @@ def update_SoC(csv_file):
     st.session_state.soc = round(my_SoC*100, 2)
 
 def update_SoH(SoH=100):
+    # Chiamata alla funzione per calcolare lo stato di salute
     st.session_state.soh = SoH
 
 
-# Titolo
+
 st.title("Monitoraggio Stato Batteria")
 
 # Stato per controllare la visualizzazione
@@ -74,22 +75,23 @@ if st.session_state.show_uploader:
     if uploaded_file is not None:
         update_SoC(uploaded_file)
         update_SoH(0.989 * 100)
-        # Qui puoi chiamare le tue funzioni: update_SoC(data), ecc.
+
         st.success("Dati caricati con successo!")
         st.session_state.show_uploader = False
 
-# Colonne affiancate
+
+
 col1, col2 = st.columns(2)
 
+#indicatore SoC (barra di progresso)
 with col1:
-    # Indicatore SoC (barra + numero)
     soc = int(st.session_state.soc)
     st.subheader("State of Charge (SoC) :")
     st.subheader(f"🔋 {st.session_state.soc:.1f} %")
     st.progress(soc)
 
+# Indicatore SoH (numero colorato)
 with col2:
-    # Indicatore SoH (numero colorato)
     soh_color = "green" if st.session_state.soh > 80 else "orange" if st.session_state.soh > 60 else "red"
     st.subheader("State of Health (SoH)")
     st.markdown(
@@ -101,19 +103,16 @@ with col2:
         unsafe_allow_html=True
     )
 
-# Spazio extra
 st.markdown("<br><br>", unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns([1, 6, 1])
 
 with col2:
-    # Titolo centrato
     st.markdown(
         "<h3 style='text-align:center;'>Seleziona il profilo di carica:</h3>",
         unsafe_allow_html=True
     )
 
-    # Radio centrato con un po’ di CSS
     st.markdown("""
         <style>
         [data-testid="stRadio"] > div {
@@ -125,7 +124,6 @@ with col2:
     profile = st.radio("", ["Quick", "Balanced", "Long Life"])
     st.session_state.charging_profile = profile
 
-    # Messaggio e lista centrati
     if profile == "Quick":
         st.markdown("⚡ **Ricarica veloce selezionata**: priorità alla velocità, possibile stress sulla batteria.", unsafe_allow_html=True)
         st.markdown(
@@ -170,6 +168,7 @@ with col2:
             """,
             unsafe_allow_html=True
         )
+        
 # # Scelta profilo di carica
 # st.subheader("Seleziona il profilo di carica:")
 # profile = st.radio(
